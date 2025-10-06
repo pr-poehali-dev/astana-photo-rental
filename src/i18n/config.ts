@@ -60,7 +60,7 @@ const resources = {
         },
         deposit: {
           title: 'Залог',
-          description: 'Требуется залог в размере 50% от стоимости оборудования.',
+          description: 'Есть аренда с залогом (100% стоимости) и без. Для получения возможности аренды без залога нужно пройти проверку личности.',
         },
         return: {
           title: 'Возврат',
@@ -171,7 +171,7 @@ const resources = {
         },
         deposit: {
           title: 'Deposit',
-          description: 'A deposit of 50% of the equipment cost is required.',
+          description: 'Rental available with deposit (100% of cost) or without. Identity verification required for deposit-free rental.',
         },
         return: {
           title: 'Return',
@@ -282,7 +282,7 @@ const resources = {
         },
         deposit: {
           title: 'Кепілдік',
-          description: 'Жабдық құнының 50% мөлшерінде кепілдік қажет.',
+          description: 'Кепілдікпен (құнның 100%) және кепілдіксіз жалға алу бар. Кепілдіксіз жалдау үшін жеке басты тексеру қажет.',
         },
         return: {
           title: 'Қайтару',
