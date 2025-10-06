@@ -68,7 +68,7 @@ const resources = {
         },
         delivery: {
           title: 'Доставка',
-          description: 'Доставка по Астане — 2000 ₸. Самовывоз бесплатно.',
+          description: 'Самовывоз бесплатно, доставка платная. Стоимость доставки зависит от времени и адреса.',
         },
         additionalInfo: {
           title: 'Дополнительная информация',
@@ -179,7 +179,7 @@ const resources = {
         },
         delivery: {
           title: 'Delivery',
-          description: 'Delivery in Astana — 2000 ₸. Free pickup.',
+          description: 'Free pickup, paid delivery. Delivery cost depends on time and address.',
         },
         additionalInfo: {
           title: 'Additional Information',
@@ -290,7 +290,7 @@ const resources = {
         },
         delivery: {
           title: 'Жеткізу',
-          description: 'Астана бойынша жеткізу — 2000 ₸. Өзіңіз алу тегін.',
+          description: 'Өзіңіз алу тегін, жеткізу ақылы. Жеткізу құны уақыт пен мекенжайға байланысты.',
         },
         additionalInfo: {
           title: 'Қосымша ақпарат',
