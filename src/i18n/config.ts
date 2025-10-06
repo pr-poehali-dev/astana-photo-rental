@@ -72,9 +72,8 @@ const resources = {
         },
         additionalInfo: {
           title: 'Дополнительная информация',
-          item1: 'Оборудование выдаётся только при наличии документа, удостоверяющего личность',
-          item2: 'При повреждении оборудования ремонт оплачивается из залога',
-          item3: 'Скидки при аренде на срок от 7 дней — уточняйте у менеджера',
+          item1: 'Самые выгодные условия аренды в Астане',
+          item2: 'Скидки при аренде на срок от 7 дней — уточняйте у менеджера',
         },
       },
       contact: {
@@ -183,9 +182,8 @@ const resources = {
         },
         additionalInfo: {
           title: 'Additional Information',
-          item1: 'Equipment is issued only with a valid ID document',
-          item2: 'In case of equipment damage, repair is paid from the deposit',
-          item3: 'Discounts for rentals of 7 days or more — check with the manager',
+          item1: 'The best rental terms in Astana',
+          item2: 'Discounts for rentals of 7 days or more — check with the manager',
         },
       },
       contact: {
@@ -294,9 +292,8 @@ const resources = {
         },
         additionalInfo: {
           title: 'Қосымша ақпарат',
-          item1: 'Жабдық тек жеке куәлік бар жағдайда беріледі',
-          item2: 'Жабдық зақымдалған жағдайда жөндеу кепілдіктен төленеді',
-          item3: '7 күннен астам мерзімге жалдағанда жеңілдіктер — менеджерден білісіңіз',
+          item1: 'Астанадағы ең тиімді жалға алу шарттары',
+          item2: '7 күннен астам мерзімге жалдағанда жеңілдіктер — менеджерден білісіңіз',
         },
       },
       contact: {
