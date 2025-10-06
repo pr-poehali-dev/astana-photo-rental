@@ -2,10 +2,35 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
+import { format } from 'date-fns';
+import { ru } from 'date-fns/locale';
+
+interface EquipmentItem {
+  id: number;
+  title: string;
+  category: string;
+  price: string;
+  pricePerDay: string;
+  icon: string;
+  description: string;
+}
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
+  const [selectedEquipment, setSelectedEquipment] = useState<EquipmentItem | null>(null);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerNotes, setCustomerNotes] = useState('');
+  const { toast } = useToast();
 
   const equipment = [
     {
@@ -87,6 +112,62 @@ const Index = () => {
     setActiveSection(section);
     const element = document.getElementById(section);
     element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleBookingClick = (item: EquipmentItem) => {
+    setSelectedEquipment(item);
+    setBookingOpen(true);
+  };
+
+  const calculateDays = () => {
+    if (!startDate || !endDate) return 0;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : 0;
+  };
+
+  const calculateTotal = () => {
+    if (!selectedEquipment) return 0;
+    const days = calculateDays();
+    const pricePerDay = parseInt(selectedEquipment.price.replace(/\s/g, '').replace('₸', ''));
+    return days * pricePerDay;
+  };
+
+  const handleSubmitBooking = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!customerName || !customerPhone || !startDate || !endDate) {
+      toast({
+        title: 'Ошибка',
+        description: 'Пожалуйста, заполните все обязательные поля',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    if (new Date(startDate) >= new Date(endDate)) {
+      toast({
+        title: 'Ошибка',
+        description: 'Дата окончания должна быть позже даты начала',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    toast({
+      title: 'Заявка отправлена!',
+      description: `Мы свяжемся с вами по номеру ${customerPhone} для подтверждения`,
+    });
+
+    setBookingOpen(false);
+    setCustomerName('');
+    setCustomerPhone('');
+    setCustomerNotes('');
+    setStartDate('');
+    setEndDate('');
+    setSelectedEquipment(null);
   };
 
   return (
@@ -188,7 +269,7 @@ const Index = () => {
                         <span className="text-sm text-muted-foreground">{item.pricePerDay}</span>
                       </div>
                     </div>
-                    <Button className="w-full mt-4" size="lg">
+                    <Button className="w-full mt-4" size="lg" onClick={() => handleBookingClick(item)}>
                       Забронировать
                     </Button>
                   </CardContent>
@@ -321,6 +402,107 @@ const Index = () => {
           </div>
         </div>
       </footer>
+
+      <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Бронирование оборудования</DialogTitle>
+            <DialogDescription>
+              {selectedEquipment?.title} — {selectedEquipment?.category}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleSubmitBooking} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Ваше имя *</Label>
+              <Input
+                id="name"
+                value={customerName}
+                onChange={(e) => setCustomerName(e.target.value)}
+                placeholder="Введите ваше имя"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone">Телефон *</Label>
+              <Input
+                id="phone"
+                type="tel"
+                value={customerPhone}
+                onChange={(e) => setCustomerPhone(e.target.value)}
+                placeholder="+7 700 123 45 67"
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="startDate">Дата начала *</Label>
+                <Input
+                  id="startDate"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  min={new Date().toISOString().split('T')[0]}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="endDate">Дата окончания *</Label>
+                <Input
+                  id="endDate"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  min={startDate || new Date().toISOString().split('T')[0]}
+                  required
+                />
+              </div>
+            </div>
+
+            {startDate && endDate && calculateDays() > 0 && (
+              <div className="p-4 bg-muted rounded-lg space-y-1">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Количество дней:</span>
+                  <span className="font-medium">{calculateDays()}</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Цена за сутки:</span>
+                  <span className="font-medium">{selectedEquipment?.price}</span>
+                </div>
+                <div className="pt-2 border-t flex justify-between">
+                  <span className="font-semibold">Итого:</span>
+                  <span className="text-xl font-bold text-primary">
+                    {calculateTotal().toLocaleString('ru-RU')} ₸
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="notes">Комментарий</Label>
+              <Textarea
+                id="notes"
+                value={customerNotes}
+                onChange={(e) => setCustomerNotes(e.target.value)}
+                placeholder="Дополнительные пожелания или вопросы"
+                rows={3}
+              />
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <Button type="button" variant="outline" className="flex-1" onClick={() => setBookingOpen(false)}>
+                Отмена
+              </Button>
+              <Button type="submit" className="flex-1">
+                Отправить заявку
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
