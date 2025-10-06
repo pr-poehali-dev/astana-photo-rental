@@ -7,7 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
+import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
@@ -22,6 +24,7 @@ interface EquipmentItem {
 }
 
 const Index = () => {
+  const { t, i18n } = useTranslation();
   const [activeSection, setActiveSection] = useState('home');
   const [selectedEquipment, setSelectedEquipment] = useState<EquipmentItem | null>(null);
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -32,79 +35,83 @@ const Index = () => {
   const [customerNotes, setCustomerNotes] = useState('');
   const { toast } = useToast();
 
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
+
   const equipment = [
     {
       id: 1,
-      title: 'Sony A7 III',
-      category: 'Камеры',
+      title: t('equipment.items.sony.title'),
+      category: t('equipment.categories.cameras'),
       price: '15 000 ₸',
-      pricePerDay: 'в сутки',
+      pricePerDay: t('equipment.perDay'),
       icon: 'Camera',
-      description: 'Полнокадровая беззеркальная камера 24.2 МП',
+      description: t('equipment.items.sony.description'),
     },
     {
       id: 2,
-      title: 'Canon EF 50mm f/1.8',
-      category: 'Объективы',
+      title: t('equipment.items.canon.title'),
+      category: t('equipment.categories.lenses'),
       price: '5 000 ₸',
-      pricePerDay: 'в сутки',
+      pricePerDay: t('equipment.perDay'),
       icon: 'Circle',
-      description: 'Светосильный портретный объектив',
+      description: t('equipment.items.canon.description'),
     },
     {
       id: 3,
-      title: 'Godox SL-60W',
-      category: 'Свет',
+      title: t('equipment.items.godox.title'),
+      category: t('equipment.categories.lighting'),
       price: '8 000 ₸',
-      pricePerDay: 'в сутки',
+      pricePerDay: t('equipment.perDay'),
       icon: 'Lightbulb',
-      description: 'LED постоянный свет 60W',
+      description: t('equipment.items.godox.description'),
     },
     {
       id: 4,
-      title: 'DJI Ronin SC',
-      category: 'Стабилизация',
+      title: t('equipment.items.dji.title'),
+      category: t('equipment.categories.stabilization'),
       price: '12 000 ₸',
-      pricePerDay: 'в сутки',
+      pricePerDay: t('equipment.perDay'),
       icon: 'Video',
-      description: 'Трёхосевой стабилизатор для камер',
+      description: t('equipment.items.dji.description'),
     },
     {
       id: 5,
-      title: 'Rode VideoMic Pro',
-      category: 'Звук',
+      title: t('equipment.items.rode.title'),
+      category: t('equipment.categories.audio'),
       price: '6 000 ₸',
-      pricePerDay: 'в сутки',
+      pricePerDay: t('equipment.perDay'),
       icon: 'Mic',
-      description: 'Направленный микрофон для видео',
+      description: t('equipment.items.rode.description'),
     },
     {
       id: 6,
-      title: 'Manfrotto 190',
-      category: 'Штативы',
+      title: t('equipment.items.manfrotto.title'),
+      category: t('equipment.categories.tripods'),
       price: '4 000 ₸',
-      pricePerDay: 'в сутки',
+      pricePerDay: t('equipment.perDay'),
       icon: 'Triangle',
-      description: 'Профессиональный штатив из алюминия',
+      description: t('equipment.items.manfrotto.description'),
     },
   ];
 
   const rentalTerms = [
     {
-      title: 'Бронирование',
-      description: 'Минимальный срок аренды — 1 сутки. Бронирование через сайт или WhatsApp.',
+      title: t('terms.booking.title'),
+      description: t('terms.booking.description'),
     },
     {
-      title: 'Залог',
-      description: 'Требуется залог в размере 50% от стоимости оборудования.',
+      title: t('terms.deposit.title'),
+      description: t('terms.deposit.description'),
     },
     {
-      title: 'Возврат',
-      description: 'Оборудование принимается в том же состоянии. Проверка при получении и возврате.',
+      title: t('terms.return.title'),
+      description: t('terms.return.description'),
     },
     {
-      title: 'Доставка',
-      description: 'Доставка по Астане — 2000 ₸. Самовывоз бесплатно.',
+      title: t('terms.delivery.title'),
+      description: t('terms.delivery.description'),
     },
   ];
 
@@ -140,8 +147,8 @@ const Index = () => {
     
     if (!customerName || !customerPhone || !startDate || !endDate) {
       toast({
-        title: 'Ошибка',
-        description: 'Пожалуйста, заполните все обязательные поля',
+        title: t('booking.errorTitle'),
+        description: t('booking.errorRequired'),
         variant: 'destructive',
       });
       return;
@@ -149,16 +156,16 @@ const Index = () => {
 
     if (new Date(startDate) >= new Date(endDate)) {
       toast({
-        title: 'Ошибка',
-        description: 'Дата окончания должна быть позже даты начала',
+        title: t('booking.errorTitle'),
+        description: t('booking.errorDate'),
         variant: 'destructive',
       });
       return;
     }
 
     toast({
-      title: 'Заявка отправлена!',
-      description: `Мы свяжемся с вами по номеру ${customerPhone} для подтверждения`,
+      title: t('booking.successTitle'),
+      description: t('booking.successDescription', { phone: customerPhone }),
     });
 
     setBookingOpen(false);
@@ -186,7 +193,7 @@ const Index = () => {
                 activeSection === 'home' ? 'text-primary' : 'text-foreground/60'
               }`}
             >
-              Каталог
+              {t('header.catalog')}
             </button>
             <button
               onClick={() => scrollToSection('terms')}
@@ -194,7 +201,7 @@ const Index = () => {
                 activeSection === 'terms' ? 'text-primary' : 'text-foreground/60'
               }`}
             >
-              Условия аренды
+              {t('header.terms')}
             </button>
             <button
               onClick={() => scrollToSection('contact')}
@@ -202,8 +209,18 @@ const Index = () => {
                 activeSection === 'contact' ? 'text-primary' : 'text-foreground/60'
               }`}
             >
-              Контакты
+              {t('header.contact')}
             </button>
+            <Select value={i18n.language} onValueChange={changeLanguage}>
+              <SelectTrigger className="w-[80px] h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ru">RU</SelectItem>
+                <SelectItem value="en">EN</SelectItem>
+                <SelectItem value="kk">KZ</SelectItem>
+              </SelectContent>
+            </Select>
           </nav>
 
           <Sheet>
@@ -218,20 +235,32 @@ const Index = () => {
                   onClick={() => scrollToSection('home')}
                   className="text-left text-lg font-medium"
                 >
-                  Каталог
+                  {t('header.catalog')}
                 </button>
                 <button
                   onClick={() => scrollToSection('terms')}
                   className="text-left text-lg font-medium"
                 >
-                  Условия аренды
+                  {t('header.terms')}
                 </button>
                 <button
                   onClick={() => scrollToSection('contact')}
                   className="text-left text-lg font-medium"
                 >
-                  Контакты
+                  {t('header.contact')}
                 </button>
+                <div className="mt-4">
+                  <Select value={i18n.language} onValueChange={changeLanguage}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ru">Русский</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="kk">Қазақша</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </nav>
             </SheetContent>
           </Sheet>
@@ -243,11 +272,10 @@ const Index = () => {
           <div className="container px-4 md:px-6">
             <div className="mb-12 text-center">
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                Аренда фото и видео оборудования
+                {t('hero.title')}
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Профессиональное оборудование для съёмки в Астане. Камеры, объективы, свет и
-                аксессуары от ведущих производителей.
+                {t('hero.description')}
               </p>
             </div>
 
@@ -270,7 +298,7 @@ const Index = () => {
                       </div>
                     </div>
                     <Button className="w-full mt-4" size="lg" onClick={() => handleBookingClick(item)}>
-                      Забронировать
+                      {t('equipment.bookButton')}
                     </Button>
                   </CardContent>
                 </Card>
@@ -282,9 +310,9 @@ const Index = () => {
         <section id="terms" className="py-16 md:py-24 bg-muted/30">
           <div className="container px-4 md:px-6">
             <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Условия аренды</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{t('terms.title')}</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Простые и прозрачные правила работы с нашим оборудованием
+                {t('terms.subtitle')}
               </p>
             </div>
 
@@ -302,19 +330,19 @@ const Index = () => {
             <div className="mt-12 max-w-3xl mx-auto">
               <Card>
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-3">Дополнительная информация</h3>
+                  <h3 className="text-lg font-semibold mb-3">{t('terms.additionalInfo.title')}</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-start gap-2">
                       <Icon name="Check" className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                      <span>Оборудование выдаётся только при наличии документа, удостоверяющего личность</span>
+                      <span>{t('terms.additionalInfo.item1')}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Icon name="Check" className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                      <span>При повреждении оборудования ремонт оплачивается из залога</span>
+                      <span>{t('terms.additionalInfo.item2')}</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <Icon name="Check" className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                      <span>Скидки при аренде на срок от 7 дней — уточняйте у менеджера</span>
+                      <span>{t('terms.additionalInfo.item3')}</span>
                     </li>
                   </ul>
                 </CardContent>
@@ -326,9 +354,9 @@ const Index = () => {
         <section id="contact" className="py-16 md:py-24">
           <div className="container px-4 md:px-6">
             <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Контакты</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{t('contact.title')}</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Свяжитесь с нами для бронирования оборудования
+                {t('contact.subtitle')}
               </p>
             </div>
 
@@ -340,7 +368,7 @@ const Index = () => {
                       <Icon name="Phone" className="h-6 w-6 text-primary" />
                     </div>
                   </div>
-                  <h3 className="font-semibold mb-2">Телефон</h3>
+                  <h3 className="font-semibold mb-2">{t('contact.phone')}</h3>
                   <a href="tel:+77001234567" className="text-primary hover:underline">
                     +7 700 123 45 67
                   </a>
@@ -354,7 +382,7 @@ const Index = () => {
                       <Icon name="MessageCircle" className="h-6 w-6 text-primary" />
                     </div>
                   </div>
-                  <h3 className="font-semibold mb-2">WhatsApp</h3>
+                  <h3 className="font-semibold mb-2">{t('contact.whatsapp')}</h3>
                   <a href="https://wa.me/77001234567" className="text-primary hover:underline">
                     +7 700 123 45 67
                   </a>
@@ -368,21 +396,19 @@ const Index = () => {
                       <Icon name="MapPin" className="h-6 w-6 text-primary" />
                     </div>
                   </div>
-                  <h3 className="font-semibold mb-2">Адрес</h3>
-                  <p className="text-muted-foreground">
-                    Астана, район Есиль,
-                    <br />
-                    ул. Кабанбай батыра 15
+                  <h3 className="font-semibold mb-2">{t('contact.address')}</h3>
+                  <p className="text-muted-foreground" style={{ whiteSpace: 'pre-line' }}>
+                    {t('contact.addressText')}
                   </p>
                 </CardContent>
               </Card>
             </div>
 
             <div className="mt-8 text-center">
-              <p className="text-muted-foreground mb-4">Часы работы: Пн-Вс 10:00 — 20:00</p>
+              <p className="text-muted-foreground mb-4">{t('contact.workingHours')}</p>
               <Button size="lg" className="gap-2">
                 <Icon name="MessageCircle" className="h-5 w-5" />
-                Написать в WhatsApp
+                {t('contact.writeWhatsapp')}
               </Button>
             </div>
           </div>
@@ -397,7 +423,7 @@ const Index = () => {
               <span className="font-semibold">Fotoprokat_KZ</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2025 Аренда оборудования в Астане. Все права защищены.
+              {t('footer.copyright')}
             </p>
           </div>
         </div>
@@ -406,7 +432,7 @@ const Index = () => {
       <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Бронирование оборудования</DialogTitle>
+            <DialogTitle>{t('booking.title')}</DialogTitle>
             <DialogDescription>
               {selectedEquipment?.title} — {selectedEquipment?.category}
             </DialogDescription>
@@ -414,31 +440,31 @@ const Index = () => {
           
           <form onSubmit={handleSubmitBooking} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Ваше имя *</Label>
+              <Label htmlFor="name">{t('booking.name')} *</Label>
               <Input
                 id="name"
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                placeholder="Введите ваше имя"
+                placeholder={t('booking.namePlaceholder')}
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phone">Телефон *</Label>
+              <Label htmlFor="phone">{t('booking.phone')} *</Label>
               <Input
                 id="phone"
                 type="tel"
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
-                placeholder="+7 700 123 45 67"
+                placeholder={t('booking.phonePlaceholder')}
                 required
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="startDate">Дата начала *</Label>
+                <Label htmlFor="startDate">{t('booking.startDate')} *</Label>
                 <Input
                   id="startDate"
                   type="date"
@@ -450,7 +476,7 @@ const Index = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="endDate">Дата окончания *</Label>
+                <Label htmlFor="endDate">{t('booking.endDate')} *</Label>
                 <Input
                   id="endDate"
                   type="date"
@@ -465,15 +491,15 @@ const Index = () => {
             {startDate && endDate && calculateDays() > 0 && (
               <div className="p-4 bg-muted rounded-lg space-y-1">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Количество дней:</span>
+                  <span className="text-muted-foreground">{t('booking.days')}</span>
                   <span className="font-medium">{calculateDays()}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Цена за сутки:</span>
+                  <span className="text-muted-foreground">{t('booking.pricePerDay')}</span>
                   <span className="font-medium">{selectedEquipment?.price}</span>
                 </div>
                 <div className="pt-2 border-t flex justify-between">
-                  <span className="font-semibold">Итого:</span>
+                  <span className="font-semibold">{t('booking.total')}</span>
                   <span className="text-xl font-bold text-primary">
                     {calculateTotal().toLocaleString('ru-RU')} ₸
                   </span>
@@ -482,22 +508,22 @@ const Index = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="notes">Комментарий</Label>
+              <Label htmlFor="notes">{t('booking.comment')}</Label>
               <Textarea
                 id="notes"
                 value={customerNotes}
                 onChange={(e) => setCustomerNotes(e.target.value)}
-                placeholder="Дополнительные пожелания или вопросы"
+                placeholder={t('booking.commentPlaceholder')}
                 rows={3}
               />
             </div>
 
             <div className="flex gap-3 pt-2">
               <Button type="button" variant="outline" className="flex-1" onClick={() => setBookingOpen(false)}>
-                Отмена
+                {t('booking.cancel')}
               </Button>
               <Button type="submit" className="flex-1">
-                Отправить заявку
+                {t('booking.submit')}
               </Button>
             </div>
           </form>
