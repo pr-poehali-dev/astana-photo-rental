@@ -176,7 +176,7 @@ const Index = () => {
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-2">
             <Icon name="Camera" className="h-6 w-6 text-primary" />
-            <span className="text-xl font-semibold tracking-tight">EQUIPMENT RENTAL</span>
+            <span className="text-xl font-semibold tracking-tight">Fotoprokat_KZ</span>
           </div>
 
           <nav className="hidden md:flex items-center gap-6">
@@ -394,7 +394,7 @@ const Index = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <Icon name="Camera" className="h-5 w-5 text-primary" />
-              <span className="font-semibold">EQUIPMENT RENTAL</span>
+              <span className="font-semibold">Fotoprokat_KZ</span>
             </div>
             <p className="text-sm text-muted-foreground">
               © 2025 Аренда оборудования в Астане. Все права защищены.
